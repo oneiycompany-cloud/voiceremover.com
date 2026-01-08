@@ -10,13 +10,13 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 
 # Copiar requirements
-COPY requirements.txt .
+COPY backend/requirements.txt .
 
 # Instalar dependencias Python
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copiar el resto del backend
-COPY . .
+COPY backend/ .
 
 # Exponer puerto
 EXPOSE 8000
