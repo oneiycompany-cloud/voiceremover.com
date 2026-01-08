@@ -1,22 +1,25 @@
 FROM python:3.10-slim
 
-# Instalar dependencias requeridas para Demucs y ffmpeg
-RUN apt-get update && apt-get install -y ffmpeg libsndfile1 && apt-get clean
+# Instalar dependencias del sistema necesarias para Demucs
+RUN apt-get update && apt-get install -y \
+    ffmpeg \
+    libsndfile1 \
+    && rm -rf /var/lib/apt/lists/*
 
-# Crear carpeta de la app
+# Directorio de trabajo
 WORKDIR /app
 
 # Copiar requirements
-COPY requirements.txt /app/requirements.txt
+COPY requirements.txt .
 
-# Instalar librerías
+# Instalar dependencias Python
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copiar todos los archivos del backend
-COPY . /app
+# Copiar el resto del backend
+COPY . .
 
 # Exponer puerto
 EXPOSE 8000
 
-# Comando para iniciar el servidor FastAPI
+# Iniciar FastAPI
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
